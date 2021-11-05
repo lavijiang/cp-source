@@ -33,6 +33,5 @@ int main()
     }else{
         cout<<res<<endl;
     }
-    
     return 0;
 }
