@@ -6,8 +6,6 @@ typedef long long LL;
 LL a,b,x;
 int t;
 
-LL gcd(LL aa,LL bb){ return bb==0?aa:gcd(bb,aa%bb); }
-
 int main()
 {
     cin>>t;
