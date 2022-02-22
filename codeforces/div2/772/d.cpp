@@ -10,59 +10,57 @@ const int mod = 1e9 + 7;
 int main () {
     ios::sync_with_stdio(false);
     cin.tie(0);
-    int n, p;
-    cin >> n >> p;
-    vector <int> a(n);
-    for (int i = 0; i < n; ++i) {
-        cin >> a[i];
-    }
-    sort(a.begin(), a.end());
-    set <int> useful;
-    for (int i = 0; i < n; ++i) {
-        int x = a[i];
+    
+    int n,p;
+    cin>>n>>p;
+    vector<int> a(n);
+    for(int i=0;i<n;i++) cin>>a[i];
+    set<int> useless;
+    sort(a.begin(),a.end());
+    for(int nu:a){
+        int x = nu;
         bool flag = false;
-        while (x > 0) {
-            if (useful.count(x)) {
+        while(x){
+            if(useless.count(x)){
                 flag = true;
                 break;
             }
-            if (x & 1) {
+            if(x & 1){
                 x >>= 1;
-            } else if (x & 2) {
-                //无法由2 3 操作转换而来
-                break;
-            } else {
+            }else if(x & 2){
+                break; //必然无法从2、3操作衍生得到
+            }else{
                 x >>= 2;
             }
         }
-        if (!flag)
-            useful.insert(a[i]);
+        if(!flag){
+            useless.insert(nu);
+        }
     }
-    vector <int> cnt(30, 0), dp(p);
-    for (int x : useful) {
-        cnt[__lg(x)]++;
+    vector<int> cnt(30,0);
+    for(int nu:a){
+        if(useless.count(nu)){
+            cnt[__lg(nu)]++; 
+        }
     }
+
     int ans = 0;
-    for (int i = 0; i < p; ++i) {
-        if (i < 30) {
+    vector<int> dp(p);
+    for(int i=0;i<p;i++){
+        if(i<30){
             dp[i] = cnt[i];
         }
-        if (i >= 1) {
-            dp[i] += dp[i - 1];
-            if (dp[i] >= mod) {
-                dp[i] -= mod;
-            }
+        if(i>0){
+            dp[i] += dp[i-1];
+            if(dp[i]>=mod) dp[i] %= mod;
         }
-        if (i >= 2) {
-            dp[i] += dp[i - 2];
-            if (dp[i] >= mod) {
-                dp[i] -= mod;
-            }
+        if(i>1){
+            dp[i] += dp[i-2];
+            if(dp[i]>=mod) dp[i] %= mod;
         }
         ans += dp[i];
-        if (ans >= mod) {
-            ans -= mod;
-        }
+        if(ans >= mod) ans %= mod;
     }
-    cout << ans << endl;
+    cout<<ans<<endl;
+    return 0;
 }
